@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos.Stock;
+using API.Helpers;
 using API.Models;
 
 
@@ -12,7 +13,7 @@ namespace API.Interfaces
     public interface IStockRepository
     {
         // метод для получения всех акций. Возвращает список всех акций в виде объекта List<Stock>.
-        Task<List<Stock>> GetAllAsync();
+        Task<List<Stock>> GetAllAsync(QueryObject query);
         // метод для получения акции по её идентификатору. Возвращает объект акции с указанным идентификатором. Если акция не найдена, возвращает null.
         Task<Stock?> GetByIdAsync(int id);
         // метод для создания новой акции. Принимает объект модели акции Stock в качестве параметра и возвращает созданный объект акции.

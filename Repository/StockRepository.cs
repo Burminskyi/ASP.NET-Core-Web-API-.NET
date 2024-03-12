@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Dtos.Stock;
+using API.Helpers;
 using API.Interfaces;
 using API.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 
@@ -50,10 +52,22 @@ namespace API.Repository
 
         //----------------
         // Метод GetAllAsync возвращает список всех акций из базы данных, вызывая метод ToListAsync.
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
             // .Include(c => c.Comments) используется для жадной загрузки связанных данных. Это гарантирует, что вместе с акциями будут извлечены связанные комментарии для каждой акции из базы данных. Это полезно, когда необходимо работать с связанными сущностями без дополнительных запросов к базе данных позже.
-            return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+            var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            return await stocks.ToListAsync();
         }
 
         //----------------

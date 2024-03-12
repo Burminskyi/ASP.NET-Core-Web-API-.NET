@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Dtos.Stock;
+using API.Helpers;
 using API.Interfaces;
 using API.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -38,12 +39,13 @@ namespace API.Controllers
         //------------------
         // это атрибут, который указывает, что метод обрабатывает HTTP GET запросы.
         [HttpGet]
-
         // это метод, который возвращает все акции.
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             // это вызов асинхронного метода GetAllAsync() репозитория акций для получения всех акций из базы данных.
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(query);
 
             // это преобразование полученных акций в DTO (Data Transfer Object). Здесь используется метод ToStockDto(), который преобразует акцию в объект DTO.
             var stockDto = stocks.Select(s => s.ToStockDto());
@@ -52,9 +54,12 @@ namespace API.Controllers
             return Ok(stockDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var stock = await _stockRepo.GetByIdAsync(id);
 
             if (stock == null)
@@ -72,6 +77,8 @@ namespace API.Controllers
         // stockDto - это имя переменной, которая является параметром метода Create контроллера.В данном контексте, это объект, который содержит данные о новой акции, переданные клиентом в теле HTTP-запроса.
         public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             // этот код вызывает метод расширения ToStockFromCreateDto(), который преобразует объект DTO CreateStockRequestDto в объект модели Stock. Таким образом, создается новый объект модели Stock на основе данных, полученных от клиента.
             var stockModel = stockDto.ToStockFromCreateDto();
             // этот код вызывает асинхронный метод CreateAsync(stockModel) репозитория акций для добавления новой акции в базу данных.
@@ -82,10 +89,12 @@ namespace API.Controllers
 
         //------------------
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         //это метод контроллера, который принимает два параметра: id из маршрута (идентификатор акции, которую нужно обновить) и updateDto из тела HTTP запроса (DTO для обновления информации об акции).
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             // это вызов асинхронного метода _stockRepo.UpdateAsync, который обновляет информацию об акции в базе данных на основе переданных данных в объекте updateDto.
             var stockModel = await _stockRepo.UpdateAsync(id, updateDto);
 
@@ -98,9 +107,12 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var stockModel = await _stockRepo.DeleteAsync(id);
 
             if (stockModel == null)
