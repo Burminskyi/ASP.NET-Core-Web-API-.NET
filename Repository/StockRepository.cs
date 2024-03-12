@@ -48,18 +48,24 @@ namespace API.Repository
             return stockModel;
         }
 
-//----------------
+        //----------------
         // Метод GetAllAsync возвращает список всех акций из базы данных, вызывая метод ToListAsync.
         public async Task<List<Stock>> GetAllAsync()
         {
-            return await _context.Stocks.ToListAsync();
+            // .Include(c => c.Comments) используется для жадной загрузки связанных данных. Это гарантирует, что вместе с акциями будут извлечены связанные комментарии для каждой акции из базы данных. Это полезно, когда необходимо работать с связанными сущностями без дополнительных запросов к базе данных позже.
+            return await _context.Stocks.Include(c => c.Comments).ToListAsync();
         }
 
         //----------------
-        // Метод GetByIdAsync возвращает акцию по её идентификатору из базы данных, используя метод FindAsync.
+        // Метод GetByIdAsync возвращает акцию по её идентификатору из базы данных, используя метод FirstOrDefaultAsync.
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            return await _context.Stocks.FindAsync(id);
+            return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public Task<bool> StockExists(int id)
+        {
+            return _context.Stocks.AnyAsync(s => s.Id == id);
         }
 
 
@@ -69,7 +75,7 @@ namespace API.Repository
         {
             var existingStock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(existingStock == null)
+            if (existingStock == null)
             {
                 return null;
             }

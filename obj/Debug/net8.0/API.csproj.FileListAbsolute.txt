@@ -160,3 +160,8 @@
 /Users/anton/Desktop/API/bin/Debug/net8.0/runtimes/win-arm64/native/e_sqlite3.dll
 /Users/anton/Desktop/API/bin/Debug/net8.0/runtimes/win-x64/native/e_sqlite3.dll
 /Users/anton/Desktop/API/bin/Debug/net8.0/runtimes/win-x86/native/e_sqlite3.dll
+/Users/anton/Desktop/API/obj/Debug/net8.0/API.sourcelink.json
+/Users/anton/Desktop/API/bin/Debug/net8.0/Microsoft.AspNetCore.JsonPatch.dll
+/Users/anton/Desktop/API/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/Users/anton/Desktop/API/bin/Debug/net8.0/Newtonsoft.Json.dll
+/Users/anton/Desktop/API/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll

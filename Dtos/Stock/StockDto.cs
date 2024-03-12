@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Dtos.Comment;
 
 // Этот код представляет класс StockDto, который является объектом передачи данных (DTO) для акций.
 namespace API.Dtos.Stock
@@ -16,5 +17,6 @@ namespace API.Dtos.Stock
         public decimal LastDiv { get; set; }
         public string Industry { get; set; } = "";
         public long MarketCap { get; set; }
+        public List<CommentDto> Comments { get; set; }
     }
 }

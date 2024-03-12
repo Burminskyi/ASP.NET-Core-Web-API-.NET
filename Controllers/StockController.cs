@@ -16,6 +16,9 @@ namespace API.Controllers
     [Route("api/stock")]
     // это атрибут, который указывает, что контроллер является контроллером API.
     [ApiController]
+
+    //---------------
+    // ControllerBase - это базовый класс в ASP.NET Core для контроллеров, который предоставляет базовую функциональность для обработки HTTP запросов. Он является частью пространства имен Microsoft.AspNetCore.Mvc, и его используют для создания пользовательских контроллеров веб-приложений.
     public class StockController : ControllerBase
     {
         //-------------
@@ -46,7 +49,7 @@ namespace API.Controllers
             var stockDto = stocks.Select(s => s.ToStockDto());
 
             // это возврат успешного HTTP-ответа с кодом 200 и списком акций.
-            return Ok(stocks);
+            return Ok(stockDto);
         }
 
         [HttpGet("{id}")]

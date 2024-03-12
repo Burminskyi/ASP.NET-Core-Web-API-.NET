@@ -9,10 +9,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 //-------------------------
 // В этом блоке кода происходит настройка инфраструктуры Entity Framework Core для работы с базой данных SQLite в ASP.NET Core приложении.
 //этот метод добавляет сервис контекста базы данных ApplicationDBContext в контейнер зависимостей приложения. Этот контекст будет использоваться для взаимодействия с базой данных.
-builder.Services.AddDbContext<ApplicationDBContext>(options => {
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+{
     // это метод, который указывает Entity Framework Core использовать SQLite в качестве провайдера базы данных и задает строку подключения. В данном случае строка подключения извлекается из конфигурации приложения с помощью метода GetConnectionString("DefaultConnection").
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -20,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => {
 // Этот код регистрирует зависимость между интерфейсом IStockRepository и его реализацией StockRepository в контейнере зависимостей приложения.
 // AddScoped<IStockRepository, StockRepository>() означает, что каждый раз, когда в приложении запрашивается объект IStockRepository, контейнер зависимостей создает новый экземпляр класса StockRepository и предоставляет его.
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 

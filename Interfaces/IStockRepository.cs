@@ -21,6 +21,8 @@ namespace API.Interfaces
         Task<Stock> UpdateAsync(int id, UpdateStockRequestDto stockDto);
         // метод для удаления акции по её идентификатору. Принимает идентификатор акции в качестве параметра и возвращает удаленный объект акции. Если акция не найдена, возвращает null.
         Task<Stock?> DeleteAsync(int id);
+        
+        Task<bool> StockExists(int id);
     }
 }
 
